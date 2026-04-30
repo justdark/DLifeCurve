@@ -14,7 +14,7 @@ export const useDeathTableStore = create<State>((set, get) => ({
     if (get().table || get().loading) return
     set({ loading: true })
     try {
-      const t = await loadDeathTable('/death-table.csv')
+      const t = await loadDeathTable(`${import.meta.env.BASE_URL}death-table.csv`)
       set({ table: t, loading: false })
     } catch (e) {
       console.error('[lifecurve] load death table failed', e)
