@@ -53,13 +53,13 @@ export default function ScoreHeader({ result }: Props) {
   const annualBaseSpend = livingCost + lifeCost
 
   return (
-    <section className="card p-7">
+    <section className="card p-4 sm:p-7">
       <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-10">
         {/* 总分 */}
-        <div>
-          <div className="text-base text-slate-500 mb-1.5">人生体验期望总分</div>
+        <div className="shrink-0">
+          <div className="text-sm sm:text-base text-slate-500 mb-1 sm:mb-1.5">人生体验期望总分</div>
           <div className="flex items-baseline gap-3">
-            <div className="text-7xl font-semibold tracking-tight text-ink">
+            <div className="text-5xl sm:text-7xl font-semibold tracking-tight text-ink">
               <AnimatedNumber value={result.L} digits={1} />
             </div>
             {Math.abs(delta) > 0.05 && (
@@ -75,8 +75,8 @@ export default function ScoreHeader({ result }: Props) {
           </div>
         </div>
 
-        {/* 副指标 */}
-        <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+        {/* 副指标：移动端横向滚动，桌面端 wrap */}
+        <div className="flex md:flex-wrap gap-x-6 sm:gap-x-8 gap-y-3 text-sm overflow-x-auto md:overflow-visible -mx-4 px-4 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none' }}>
           <Metric
             label="期望寿命"
             value={
@@ -129,9 +129,9 @@ export default function ScoreHeader({ result }: Props) {
 
 function Metric({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div>
-      <div className="text-sm text-slate-400 mb-1">{label}</div>
-      <div className="text-2xl font-medium text-ink">{value}</div>
+    <div className="shrink-0">
+      <div className="text-xs sm:text-sm text-slate-400 mb-0.5 sm:mb-1 whitespace-nowrap">{label}</div>
+      <div className="text-lg sm:text-2xl font-medium text-ink whitespace-nowrap">{value}</div>
     </div>
   )
 }

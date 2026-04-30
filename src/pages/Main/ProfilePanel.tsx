@@ -48,8 +48,13 @@ export default function ProfilePanel() {
         onClick={() => setOpen(false)}
       />
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[420px] bg-white shadow-lift z-50 overflow-y-auto transition-transform duration-200 ${
-          open ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed bg-white shadow-lift z-50 overflow-y-auto transition-transform duration-200
+          inset-x-0 bottom-0 max-h-[85vh] rounded-t-2xl
+          lg:inset-auto lg:top-0 lg:right-0 lg:bottom-0 lg:w-[420px] lg:max-h-none lg:rounded-none
+          ${
+          open
+            ? 'translate-y-0 lg:translate-x-0'
+            : 'translate-y-full lg:translate-y-0 lg:translate-x-full'
         }`}
       >
         <header className="px-6 py-5 border-b border-slate-100 flex items-start justify-between sticky top-0 bg-white/90 backdrop-blur z-10">

@@ -3,7 +3,6 @@ import { makeWork } from './events/work'
 import { makeMarriage } from './events/marriage'
 import { makeChildren } from './events/children'
 import { makeHouse } from './events/house'
-import { makeWorldTravel } from './events/world-travel'
 import { makeLiving } from './events/living'
 import { makeSleep } from './events/sleep'
 import { makeLife } from './events/life'
@@ -72,15 +71,12 @@ export function buildBaselineScenario(profile: UserProfile, currentYear?: number
     events.push(makeChildren({ startAge: Math.max(t0 + 1, 32), count: 1 }))
   }
 
-  // 买房
+  // 买房：只有用户已购房才默认加，未购的让用户自己决定
   if (profile.hasHouse) {
     events.push(makeHouse({ buyAge: Math.max(28, t0 - 3) }, baseline))
-  } else {
-    events.push(makeHouse({ buyAge: Math.max(t0 + 1, 35) }, baseline))
   }
 
-  // 环球旅行
-  events.push(makeWorldTravel({ age: 45, durationYears: 0.5, totalCost: 500_000 }))
+  // 环球旅行不再默认加入；用户可在"+ 添加事件"里自由加
 
   const ts = Date.now()
   return {

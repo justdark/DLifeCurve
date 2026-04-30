@@ -24,20 +24,24 @@ export default function ChartsGrid({ result }: Props) {
         没有外露的箭头/滚动条提示——按 user 要求"看不出来"。
       */}
       <div
-        className="overflow-x-auto snap-x snap-mandatory pb-1 -mb-1"
+        className="overflow-x-auto snap-x snap-mandatory h-full"
         style={{ scrollbarWidth: 'none' }}
       >
         <style>{`
           .charts-scroll::-webkit-scrollbar { display: none; }
+          .charts-scroll {
+            grid-template-rows: repeat(2, minmax(200px, 1fr));
+            grid-auto-flow: column;
+            grid-auto-columns: calc(100% - 0.5rem);
+          }
+          @media (min-width: 1024px) {
+            .charts-scroll {
+              grid-template-rows: repeat(2, minmax(220px, 1fr));
+              grid-auto-columns: calc(50% - 0.5rem);
+            }
+          }
         `}</style>
-        <div
-          className="charts-scroll grid gap-4"
-          style={{
-            gridTemplateRows: 'repeat(2, 1fr)',
-            gridAutoFlow: 'column',
-            gridAutoColumns: 'calc(50% - 0.5rem)',
-          }}
-        >
+        <div className="charts-scroll grid gap-4 h-full">
           {/* 列 1：EV (top) + M (bottom) */}
           <div className="snap-start">
             <Card title="期望体验 EV(t)" subtitle="V(t) × 该年生存概率" color="#9B72CF" onExpand={() => setExpanded('experience')}>

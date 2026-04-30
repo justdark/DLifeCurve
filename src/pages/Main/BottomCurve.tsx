@@ -28,8 +28,7 @@ export default function BottomCurve({ result }: Props) {
         viewBox="0 0 1000 80"
         preserveAspectRatio="none"
         width="100%"
-        height="84"
-        style={{ display: 'block' }}
+        className="block h-10 sm:h-[84px]"
       >
         <defs>
           {/* 横向 fade：两端淡，中间稍清晰 */}

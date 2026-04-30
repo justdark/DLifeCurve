@@ -51,17 +51,21 @@ export default function EventDrawer() {
         }`}
         onClick={closeDrawer}
       />
-      {/* drawer */}
+      {/* drawer：移动端底部抽屉，桌面右侧抽屉 */}
       <aside
-        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[420px] bg-white shadow-lift z-50 overflow-y-auto transition-transform duration-200 ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed bg-white shadow-lift z-50 overflow-y-auto transition-transform duration-200
+          inset-x-0 bottom-0 max-h-[85vh] rounded-t-2xl
+          lg:inset-auto lg:top-0 lg:right-0 lg:bottom-0 lg:w-[420px] lg:max-h-none lg:rounded-none
+          ${drawerOpen
+            ? 'translate-y-0 lg:translate-x-0'
+            : 'translate-y-full lg:translate-y-0 lg:translate-x-full'}
+        `}
       >
         <DrawerHeader event={event} onClose={closeDrawer} />
 
         <div className="px-6 py-5 space-y-5">
           <p className="text-xs text-slate-400 -mb-2">
-            💡 双击任意滑块 → 自动找让总分最高的值
+            💡 双击 / 长按任意滑块 → 自动找让总分最高的值
           </p>
           <EventParamFields
             event={event}

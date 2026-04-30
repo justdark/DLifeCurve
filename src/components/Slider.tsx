@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useAutoOptimize } from '../hooks/useAutoOptimize'
 
 interface Props {
@@ -40,26 +41,53 @@ export default function Slider({
   const display = formatValue ? formatValue(value) : `${value}${unit ?? ''}`
 
   const enableAutoMax = !!(optKey && optEventId)
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const longPressFired = useRef(false)
+
+  const runAutoMax = () => {
+    const transform = optTransform ?? ((v: number) => v)
+    const sliderCandidates: number[] = []
+    for (let v = min; v <= max + 1e-9; v += step) {
+      sliderCandidates.push(Math.round(v * 1000) / 1000)
+    }
+    const paramCandidates = sliderCandidates.map(transform)
+    const bestParam = autoOpt(optEventId!, optKey!, paramCandidates)
+    if (bestParam === null) return
+    const idx = paramCandidates.findIndex(
+      (p) => Math.abs(p - bestParam) < 1e-6,
+    )
+    if (idx < 0) return
+    if (Math.abs(sliderCandidates[idx] - value) < 1e-6) return
+    onChange(sliderCandidates[idx])
+  }
+
   const handleDoubleClick = enableAutoMax
     ? (e: React.MouseEvent) => {
         e.preventDefault()
-        const transform = optTransform ?? ((v: number) => v)
-        const sliderCandidates: number[] = []
-        for (let v = min; v <= max + 1e-9; v += step) {
-          sliderCandidates.push(Math.round(v * 1000) / 1000)
-        }
-        const paramCandidates = sliderCandidates.map(transform)
-        const bestParam = autoOpt(optEventId!, optKey!, paramCandidates)
-        if (bestParam === null) return
-        const idx = paramCandidates.findIndex(
-          (p) => Math.abs(p - bestParam) < 1e-6,
-        )
-        if (idx < 0) return
-        // 最优值 == 当前值 → 不做无谓更新
-        if (Math.abs(sliderCandidates[idx] - value) < 1e-6) return
-        onChange(sliderCandidates[idx])
+        runAutoMax()
       }
     : undefined
+
+  // 移动端：长按触发 auto-max
+  const onTouchStart = enableAutoMax
+    ? () => {
+        longPressFired.current = false
+        longPressTimer.current = setTimeout(() => {
+          longPressFired.current = true
+          runAutoMax()
+          // 触感反馈（如果设备支持）
+          if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(20)
+        }, 600)
+      }
+    : undefined
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+  }
+  const onTouchEnd = enableAutoMax ? cancelLongPress : undefined
+  const onTouchMove = enableAutoMax ? cancelLongPress : undefined
 
   return (
     <div>
@@ -77,7 +105,10 @@ export default function Slider({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         onDoubleClick={handleDoubleClick}
-        title={enableAutoMax ? '双击自动找让总分最高的参数值' : undefined}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onTouchMove={onTouchMove}
+        title={enableAutoMax ? '双击 / 长按 自动找让总分最高的参数值' : undefined}
       />
       <div className="flex justify-between text-xs text-slate-400 mt-1 tabular-nums">
         <span>{formatValue ? formatValue(min) : `${min}${unit ?? ''}`}</span>
