@@ -4,24 +4,34 @@ interface Props {
 
 export default function Step1Welcome({ onNext }: Props) {
   return (
-    <div className="card p-10 text-center animate-in fade-in">
-      <div className="text-5xl mb-6">📈</div>
-      <h1 className="text-3xl font-semibold tracking-tight mb-3">
-        你的人生，可以模拟
+    <div className="card p-8 sm:p-10 text-center animate-in fade-in">
+      <div className="text-5xl mb-5">📈</div>
+
+      <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-2 leading-tight">
+        人生在世，体验为先
       </h1>
-      <p className="text-slate-500 mb-8 leading-relaxed">
-        基于你的画像与人生选择，
-        <br />
-        实时计算属于你的"人生总体验"曲线。
-        <br />
-        拖动每一个事件，立刻看到对结果的影响。
+      <p className="text-base text-slate-500 mb-2">
+        人生曲线 · Life Curve
       </p>
+
+      <div className="my-7 px-2">
+        <p className="text-slate-600 leading-relaxed">
+          人生是一道<span className="font-semibold text-ink">权衡题</span>
+          <br />
+          时间、金钱、体验，三者难以兼得
+        </p>
+        <p className="text-slate-600 leading-relaxed mt-3">
+          这个工具用数学和概率帮你把每个选择拆开看清
+          <br className="hidden sm:block" />
+          让你<span className="font-semibold text-ink">理性地最大化</span>这一生的体验总分
+        </p>
+      </div>
 
       <DemoCurve />
 
       <button
         onClick={onNext}
-        className="btn-primary w-full mt-8"
+        className="btn-primary w-full mt-6 py-3 text-base"
         autoFocus
       >
         开始 →
